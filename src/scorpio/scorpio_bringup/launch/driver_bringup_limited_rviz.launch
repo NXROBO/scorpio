@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <!--driver bringup -->
 <launch>
+
     <arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
     <arg name="hall_encoder" default="false"/>
 	<arg name="laser_enable" default="true"/>
-
+	<arg name="limited_speed" default="0.4"/> 
     <!-- driver -->
     <group if="$(arg model_red)">
 		<include file="$(find scorpio_description)/launch/scorpio_description_red.launch"/>
@@ -49,6 +50,8 @@
     <include file="$(find scorpio_base)/launch/scorpio_base.launch">
 		<arg name="serialport"                  value="/dev/ttyS0"/>
 		<arg name="hall_encoder"  value="$(arg hall_encoder)"/>
+		<arg name="limited_speed"  value="$(arg limited_speed)"/> 
+		
     </include>
 
     <group unless="$(arg hall_encoder)">

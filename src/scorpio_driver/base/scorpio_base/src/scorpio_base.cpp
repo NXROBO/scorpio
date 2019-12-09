@@ -151,7 +151,10 @@ public:
 			ROS_INFO("limited_speed is %f", limited_speed);
 		}
 		else
+		{
 			limited_speed = MAX_SPEED;
+			ROS_INFO("not set ! limited_speed is %f", limited_speed);
+		}
 		pub_imu = n.advertise<sensor_msgs::Imu>("/imu_data", 1);
         stimer = n.createTimer(ros::Duration(1), &STM32ComSwitchNode::checkSerialGoon, this);
         motor_send_timer = n.createTimer(ros::Duration(0.1), &STM32ComSwitchNode::motorSendData, this);

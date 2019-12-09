@@ -1,8 +1,12 @@
+<?xml version="1.0"?>
 <!--让SPARK跑起来-->
 <launch>
-    	<arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
+	<arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
+
 	<!--SCORPIO底盘驱动，机器人描述,底盘,相机-->
-	<include file="$(find scorpio_bringup)/launch/driver_bringup_rviz.launch">
+	<include file="$(find scorpio_bringup)/launch/driver_bringup_limited_rviz.launch">
 		<arg name="model_red"  value="$(arg model_red)"/>
 	</include>
+	<!--创建新的终端，spark键盘控制 “wsad”分别代表“前后左右”-->
+  	<node pkg="scorpio_teleop" type="keyboard_control.sh" name="kc_2d" />
 </launch>

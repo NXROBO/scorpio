@@ -191,7 +191,7 @@ remote_control_robot(){
 	echo -e "${Info}" 
 	echo && stty erase ^? && read -p "按回车键（Enter）开始：" 
 
-	roslaunch scorpio_teleop app_op.launch model_red:=${RED_CAR}
+	roslaunch scorpio_teleop app_op_remote.launch model_red:=${RED_CAR}
 }
 
 #让scorpio跟着你走

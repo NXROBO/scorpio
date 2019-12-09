@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <!--让SCORPIO跑起来-->
 <launch>
     	<arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
