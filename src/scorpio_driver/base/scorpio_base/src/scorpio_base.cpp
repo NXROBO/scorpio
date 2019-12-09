@@ -68,7 +68,7 @@ using namespace std;
 #define PI 3.141592654
 #define WD 0.105
 #define COUNT_TIMES 20
-#define MAX_SPEED 3.00
+#define MAX_SPEED 1.00
 class STM32ComSwitchNode;
 
 typedef int (STM32ComSwitchNode::*pfunc)(unsigned char *buf, int len);
@@ -290,8 +290,10 @@ public:
 	void write_vel2motor(float vel)
 	{
 		short mv ;
-		if((vel>limited_speed) || (vel<-limited_speed))
+		if(vel>limited_speed)
 			vel = limited_speed;
+		else if (vel<-limited_speed)
+			 vel = -limited_speed;
 		mv = vel *11800;
 		read_write_Data(0x002a, 0x0001, 0x002B, 0x0001, mv);
 	}
