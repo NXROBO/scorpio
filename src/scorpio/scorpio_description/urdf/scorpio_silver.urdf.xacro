@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- 
+	scorpio    
+
+	Copyright 2019 NXROBO LIMITED.
+    http://www.nxrobo.com
+-->
+
+<robot name="scorpio" xmlns:xacro="http://ros.org/wiki/xacro">
+  	<xacro:include filename="$(find scorpio_description)/urdf/base/car_base.urdf"/>  	
+	<xacro:include filename="$(find ydlidar_g2)/urdf/ydlidar.urdf" />	  
+	<xacro:include filename="$(find scorpio_description)/urdf/_d435.urdf.xacro" />
+	<sensor_d435 parent="base_link">
+		<origin xyz="0.16 0 0.229500" rpy="0 0 0"/>
+	</sensor_d435>
+	<!--xacro:include filename="$(find scorpio_description)/urdf/sensors/scorpio_camera.urdf"/-->
+</robot>

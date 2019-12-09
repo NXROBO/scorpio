@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- TF setting -->
+    <include file="$(find hypha_racecar)/launch/includes/racecar_tf.launch.xml" />
+
+    <!-- SENSOR DEVICE -->
+    <!-- RPLidar -->
+    <include file="$(find hypha_racecar)/launch/includes/rplidar.launch.xml" />
+    <!-- IMU -->
+    <include file="$(find hypha_racecar)/launch/includes/gy85.launch.xml" />
+    <!-- base -->
+    <include file="$(find hypha_racecar)/launch/includes/base_control.launch.xml" />
+
+    <!-- ODOMETRY -->
+    <!--rf2o_Laser_Odometry-->
+    <include file="$(find hypha_racecar)/launch/includes/rf2o.launch.xml" />
+    <!-- Robot_Localization -->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
+        <rosparam command="load" file="$(find hypha_racecar)/launch/param/laser_ekf_params.yaml" />
+    </node>
+</launch>

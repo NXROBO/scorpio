@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--scorpio rtabmap-->
+<!--scorpio技术讨论与反馈群：8346256-->
+<launch>
+
+	<!-- scorpio base driver -->
+	<include file="$(find scorpio_rtabmap)/launch/rtab_demo.launch"/>
+
+	<!-- rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find scorpio_rtabmap)/rviz/scorpio_rtab_map.rviz"/>
+	<!-- rtabmap -->
+  	<include file="$(find scorpio_rtabmap)/launch/scorpio_mapping.launch">
+		<arg name="localization"                  value="true"/>
+	</include>
+
+
+</launch>

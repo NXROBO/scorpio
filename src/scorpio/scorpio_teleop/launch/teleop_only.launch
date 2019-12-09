@@ -1,0 +1,6 @@
+<!--让SPARK跑起来-->
+<launch>
+
+	<node pkg="scorpio_teleop" type="scorpio_teleop_node" name="scorpio_teleop_node" args="0.14 0.5"/>
+
+</launch>

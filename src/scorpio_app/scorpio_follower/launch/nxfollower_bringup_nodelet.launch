@@ -1,0 +1,14 @@
+<!--
+  The scorpio people (or whatever) follower nodelet.   
+ -->
+
+<launch>	
+
+	<arg name="depth_topic" default="/camera/depth/points"/>
+	<include file="$(find scorpio_follower)/launch/include/velocity_smoother.launch.xml"/>
+
+	<node pkg="nodelet" type="nodelet" name="scorpio_base_nodelet_manager" args="manager"/>
+	<node pkg="nodelet" type="nodelet" name="nxfollower_nodelet" args="load nxfollower/NxFollowerNodelet scorpio_base_nodelet_manager" output="screen">
+		<param name="depth_topic" value="$(arg depth_topic)"/> 
+	</node>
+</launch>

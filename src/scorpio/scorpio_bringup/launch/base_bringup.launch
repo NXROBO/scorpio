@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--just scorpio base and description-->
+<launch>
+    <arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
+    <arg name="hall_encoder" default="true"/>
+    <!-- driver -->
+    <group if="$(arg model_red)">
+	<include file="$(find scorpio_description)/launch/scorpio_description_red.launch"/>	
+    </group>
+
+    <group unless="$(arg model_red)">
+	<include file="$(find scorpio_description)/launch/scorpio_description_silver.launch"/>
+    </group>
+
+    <include file="$(find scorpio_base)/launch/scorpio_base.launch">
+	<arg name="serialport"                  value="/dev/ttyS0"/>
+	<arg name="hall_encoder" value="$(arg hall_encoder)"/>
+    </include>
+
+</launch>
+
+

@@ -1,0 +1,10 @@
+<!-- lidar 3.07177948391-->
+<robot name="lidar_frame">
+	<link name="lidar_link"/>
+  	<joint name="lidar_joint" type="fixed">
+      		<origin xyz="0 0 0.3" rpy="0 0 0" />
+      		<parent link="base_link"/>
+      		<child link="lidar_link"/>
+  	</joint>
+
+</robot>

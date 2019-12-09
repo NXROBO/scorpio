@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<!-- 
+	scorpio robot's description    
+	
+	Copyright 2019 NXROBO LIMITED.
+    http://www.nxrobo.com
+-->
+
+<robot name="scorpio" xmlns:xacro="http://ros.org/wiki/xacro">
+  	<xacro:include filename="$(find scorpio_description)/urdf/scorpio_silver.urdf.xacro"/> 	
+</robot>

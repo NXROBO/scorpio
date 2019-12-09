@@ -1,0 +1,8 @@
+<!--让SPARK跑起来-->
+<launch>
+    	<arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
+	<!--SCORPIO底盘驱动，机器人描述,底盘,相机-->
+	<include file="$(find scorpio_bringup)/launch/driver_bringup_rviz.launch">
+		<arg name="model_red"  value="$(arg model_red)"/>
+	</include>
+</launch>

@@ -1,0 +1,9 @@
+<!--the car base-->
+<launch>
+  <arg name="serialport" default="/dev/ttyS0"/> 
+  <arg name="hall_encoder" default="false"/> 
+  <node pkg="scorpio_base" type="scorpio_base_node" name="scorpio_base_driver" args="$(arg serialport)" output="screen">
+	<param name="hall_encoder" value="$(arg hall_encoder)"/> 
+  </node>
+  <node pkg="scorpio_base" type="cmd_vel_to_ackermann_cmd_node" name="cmd_vel_to_ackermann_cmd_node" output="screen"/>
+</launch>
