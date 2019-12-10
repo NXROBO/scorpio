@@ -1,6 +1,5 @@
 ﻿# NXROBO scorpio
-<img src="https://raw.githubusercontent.com/NXROBO/scorpio/master/src/scorpio/scorpio_description/pic/scorpio.jpg
-" width="600">
+<img src="https://raw.githubusercontent.com/NXROBO/scorpio/master/src/scorpio/scorpio_description/pic/scorpio.jpg" width="600">
 
 ## 说明 Description
  
