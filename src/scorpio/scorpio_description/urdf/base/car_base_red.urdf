@@ -1,0 +1,272 @@
+<?xml version="1.0"?>
+<!-- 
+	spark base    
+	© 2016 NXROBO INTERNATIONAL (HONG KONG) LIMITED.
+    http://www.nxrobo.com
+-->
+
+<robot name="scorpio_base_link">
+
+<link name="base_footprint"/>		
+	<link name="base_link"/>	
+		
+	<joint name="base_footprint_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<parent link="base_footprint"/>
+		<child link="base_link" />
+	</joint>
+		
+	<link name="IMU_link"/>
+  	<joint name="IMU_joint" type="fixed">
+      		<origin xyz="0.16 0.04 0.175" rpy="0 0 -3.141592654" />
+      		<parent link="base_link"/>
+      		<child link="IMU_link"/>
+  	</joint>
+		
+	<link name="room_base_link">
+		<inertial>
+		  <origin
+		    xyz="-0.0078695 -0.020998 -0.001386"
+		    rpy="0 0 0" />
+		  <mass
+		    value="0.54755" />
+		  <inertia
+		    ixx="0.00346146576565066"
+		    ixy="-6.26423343889596E-06"
+		    ixz="8.2000761035661E-05"
+		    iyy="-1.84932053914363E-05"
+		    iyz="-0.00410723070180017"
+		    izz="1.84932053914367E-05" />
+		</inertial>
+		<visual>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+		      filename="package://scorpio_description/meshes/scorpio/base/scorpio.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>	  
+		</visual>
+		<collision>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+		      filename="package://scorpio_description/meshes/scorpio/base/scorpio.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>
+
+		</collision>	
+	</link>	
+
+ 	<!--wheel link and joint-->
+	<link name="left_back_wheel_link">
+		<inertial>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <mass
+		    value="0.54755" />
+		  <inertia
+
+		    ixx="0.00346146576565066"
+		    ixy="-6.26423343889596E-06"
+		    ixz="8.2000761035661E-05"
+		    iyy="-1.84932053914363E-05"
+		    iyz="-0.00410723070180017"
+		    izz="1.84932053914367E-05" />
+		</inertial>
+		<visual>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+		      filename="package://scorpio_description/meshes/scorpio/base/left_wheel.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>
+		      <material name = "black">
+			  <color rgba = "0.4 0.4 0.4 1"/>
+		     </material>		  
+		</visual>
+		<collision>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+		      filename="package://scorpio_description/meshes/scorpio/base/left_wheel.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>
+		      <material name = "black">
+			  <color rgba = "0.4 0.4 0.4 1"/>
+		     </material>
+		</collision>	
+	</link>  
+	
+	<joint name="left_back_wheel_joint" type="continuous">
+		<origin xyz="-0.1575 0.0928 0.0525" rpy="0 0 0" />
+		<axis xyz="0 1 0"/>
+		<parent link="base_link"/>
+		<child link="left_back_wheel_link" />
+	</joint> 	
+	
+	
+	
+	<link name="right_back_wheel_link">
+		<inertial>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <mass
+		    value="0.54755" />
+		  <inertia
+
+		    ixx="0.00346146576565066"
+		    ixy="-6.26423343889596E-06"
+		    ixz="8.2000761035661E-05"
+		    iyy="-1.84932053914363E-05"
+		    iyz="-0.00410723070180017"
+		    izz="1.84932053914367E-05" />
+		</inertial>
+		<visual>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+		      filename="package://scorpio_description/meshes/scorpio/base/right_wheel.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>
+		      <material name = "black">
+			  <color rgba = "0.4 0.4 0.4 1"/>
+		     </material>		  
+		</visual>
+		<collision>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+
+		      filename="package://scorpio_description/meshes/scorpio/base/right_wheel.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>
+		      <material name = "black">
+			  <color rgba = "0.4 0.4 0.4 1"/>
+		     </material>
+		</collision>	
+	</link>   
+	
+	<joint name="right_back_wheel_joint" type="continuous">
+		<origin xyz="-0.1575 -0.0928 0.0525" rpy="0 0 0" />
+		<axis xyz="0 1 0"/>
+		<parent link="base_link"/>
+		<child link="right_back_wheel_link" />
+	</joint> 
+
+ 	<!--left_front_wheel_link and joint-->
+	<link name="left_front_wheel_link">
+		<inertial>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <mass
+		    value="0.54755" />
+		  <inertia
+		    ixx="0.00346146576565066"
+		    ixy="-6.26423343889596E-06"
+		    ixz="8.2000761035661E-05"
+		    iyy="-1.84932053914363E-05"
+		    iyz="-0.00410723070180017"
+		    izz="1.84932053914367E-05" />
+		</inertial>
+		<visual>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+		      filename="package://scorpio_description/meshes/scorpio/base/left_wheel.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>
+		      <material name = "black">
+			  <color rgba = "0.4 0.4 0.4 1"/>
+		     </material>		  
+		</visual>
+		<collision>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+		      filename="package://scorpio_description/meshes/scorpio/base/left_wheel.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>
+		      <material name = "black">
+			  <color rgba = "0.4 0.4 0.4 1"/>
+		     </material>
+		</collision>	
+	</link>  
+	
+	<joint name="left_front_wheel_joint" type="continuous">
+		<origin xyz="0.1575 0.0928 0.0525" rpy="0 0 0" />
+		<axis xyz="0 1 0"/>
+		<parent link="base_link"/>
+		<child link="left_front_wheel_link" />
+	</joint> 	
+	
+	
+	
+	<link name="right_front_wheel_link">
+		<inertial>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <mass
+		    value="0.54755" />
+		  <inertia
+		    ixx="0.00346146576565066"
+		    ixy="-6.26423343889596E-06"
+		    ixz="8.2000761035661E-05"
+		    iyy="-1.84932053914363E-05"
+		    iyz="-0.00410723070180017"
+		    izz="1.84932053914367E-05" />
+		</inertial>
+		<visual>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+		      filename="package://scorpio_description/meshes/scorpio/base/right_wheel.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>
+		      <material name = "black">
+			  <color rgba = "0.4 0.4 0.4 1"/>
+		     </material>		  
+		</visual>
+		<collision>
+		  <origin
+		    xyz="0 0 0"
+		    rpy="0 0 0" />
+		  <geometry>
+		    <mesh
+		      filename="package://scorpio_description/meshes/scorpio/base/right_wheel.stl" scale="0.001 0.001 0.001"/>
+		  </geometry>
+		      <material name = "black">
+			  <color rgba = "0.4 0.4 0.4 1"/>
+		     </material>
+		</collision>	
+	</link>   
+	
+	<joint name="right_front_wheel_joint" type="continuous">
+		<origin xyz="0.1575 -0.0928 0.0525" rpy="0 0 0" />
+		<axis xyz="0 1 0"/>
+		<parent link="base_link"/>
+		<child link="right_front_wheel_link" />
+	</joint> 
+
+
+	<joint name="room_base_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<parent link="base_link"/>
+		<child link="room_base_link" />
+	</joint>
+	
+</robot>
+
+
