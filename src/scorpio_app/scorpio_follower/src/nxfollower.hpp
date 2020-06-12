@@ -98,19 +98,18 @@ public:
     depth_thre = 0.1;
     y_thre = 0.087222222;
 
-    if (nhandle.getParam("depth_topic", depth_topic)) 
+    if (nhandle.getParam("/nxfollower_nodelet/depth_topic", depth_topic)) 
     {
    	    if(depth_topic.empty())
 	    {
 			depth_topic = "/camera/depth/points";
     	}
 	}
-	ROS_INFO("====depth_topic is %s!", depth_topic.c_str());
-	printf("====depth_topic is %s!/n", depth_topic.c_str());
+	ROS_INFO("depth_topic is %s!", depth_topic.c_str());
     // public the cmd_vel message
     cmdvel_pub = nhandle.advertise<geometry_msgs::Twist>("/raw_cmd_vel", 1);
     // subscribe the point clound
-    cloud_sub = nhandle.subscribe<PointCloud>("/camera/depth/points", 1, &NxFollowerNode::pointCloudCb, this); ///camera/depth/points
+    cloud_sub = nhandle.subscribe<PointCloud>(depth_topic, 1, &NxFollowerNode::pointCloudCb, this); ///camera/depth/points
   }
 
   virtual ~NxFollowerNode()

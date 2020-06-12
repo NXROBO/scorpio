@@ -307,6 +307,47 @@ scorpio_build_map_2d(){
 	roslaunch scorpio_slam 2d_slam_teleop.launch slam_methods_tel:=${SLAMTYPE} model_red:=${RED_CAR} 
 	
 }
+qrcode_transfer_files(){
+	echo -e "${Info}" 
+	echo -e "${Info}通过局域网收发文件" 
+	echo -e "${Info}" 
+	echo -e "${Info}请选择：
+	  ${Green_font_prefix}1.${Font_color_suffix} 发送文件（文件名，带上文件绝对路径）
+	  ${Green_font_prefix}2.${Font_color_suffix} 接收文件（默认存放在~/Downloads路径中）
+	  ${Green_font_prefix}3.${Font_color_suffix} 退出请输入：Ctrl + c" 
+	echo && stty erase ^? && read -p "请输入数字 [1-2]：" cnum
+	case "$cnum" in
+		1)
+		echo -e "${Info}请输入文件名，带上文件绝对路径，如 /home/scorpio/a.jpg：
+		 退出请输入：Ctrl + c" 
+		echo && stty erase ^? && read -p "请输入要发送的文件：" s_file
+		if [ -f "$s_file" ]; then
+			echo -e "${Info}本机即将发送文件：${Green_font_prefix}"$s_file"${Font_color_suffix}，请接收端扫码或者直接输入下面的网址接收文件"
+		else 
+			echo -e "${Info}请输入带绝对路径的文件名"
+			exit
+		fi
+		
+		qrcp send $s_file
+		;;
+		2)
+		echo -e "${Info}请输入接收到的文件存放的路径，默认为 /home/scorpio/Downloads：
+		退出请输入：Ctrl + c" 
+		echo && stty erase ^? && read -p "请输入文件存放的文件夹路径：" s_file
+		if [ -d "$s_file" ]; then
+			echo ""
+		else 
+			echo -e "${Info}${Red_font_prefix}文件夹不存在，将存放在默认文件夹/home/scorpio/Downloads中${Font_color_suffix}"
+			s_file="/home/scorpio/Downloads"
+		fi
+		echo -e "${Info}接收的文件将存放在：${Green_font_prefix}"$s_file"${Font_color_suffix}，目录下，请发送端扫码或者直接输入下面的网址选择文件发送"
+		qrcp receive --output=$s_file
+		;;
+		*)
+		echo -e "${Error} 错误，退出"
+		;;
+	esac
+}
 
 #让scorpio使用深度摄像头绘制地图
 scorpio_build_map_3d(){
@@ -408,6 +449,7 @@ echo -e "--------------分隔线----------------
   ${Green_font_prefix}101.${Font_color_suffix} 完整安装
   ${Green_font_prefix}102.${Font_color_suffix} 单独安装ROS环境
   ${Green_font_prefix}103.${Font_color_suffix} 单独安装scorpio依赖
+  ${Green_font_prefix}104.${Font_color_suffix} 文件传输
  "
 menu_status
 echo && stty erase ^? && read -p "请输入数字：" num
@@ -447,6 +489,9 @@ case "$num" in
 	;;
 	103)
 	install_scorpio_require
+	;;
+	104)
+	qrcode_transfer_files
 	;;
 	*)
 	echo -e "${Error} 请输入正确的数字 "

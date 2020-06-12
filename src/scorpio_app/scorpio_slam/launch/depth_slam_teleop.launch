@@ -1,9 +1,18 @@
+<?xml version="1.0"?>
 <!--scorpio camera slam-->
 <launch>
+
+    <arg name="hall_encoder" default="true"/>
+    <arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
+	<arg name="laser_enable" default="false"/>
+	
 	<!--scorpio slam-->
   	<arg name="slam_methods_tel" default="gmapping" doc="slam type [gmapping, cartographer, hector, karto, frontier_exploration]"/>
 	<include file="$(find scorpio_slam)/launch/depth_slam.launch">
 		<arg name="slam_methods"	value="$(arg slam_methods_tel)"/>
+		<arg name="hall_encoder" value="$(arg hall_encoder)"/>
+		<arg name="model_red"  value="$(arg model_red)"/>
+		<arg name="laser_enable"  value="$(arg laser_enable)"/>
  	</include> 
   	<!--创建新的终端，scorpio键盘控制 “wsad”分别代表“前后左右”-->
   	<node pkg="scorpio_teleop" type="keyboard_control.sh" name="kc_depth" />

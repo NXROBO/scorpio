@@ -2,16 +2,22 @@
 <!--scorpio rtabmap-->
 <!--scorpio技术讨论与反馈群：8346256-->
 <launch>
-
+    <arg name="hall_encoder" default="true"/>
+    <arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
+    <arg name="laser_enable" default="false"/>
 	<!-- scorpio base driver -->
-	<include file="$(find scorpio_rtabmap)/launch/rtab_demo.launch"/>
-
-	<!-- rviz -->
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find scorpio_rtabmap)/rviz/scorpio_rtab_map.rviz"/>
+	<include file="$(find scorpio_rtabmap)/launch/rtab_demo.launch">
+	    <arg name="hall_encoder" value="$(arg hall_encoder)"/>
+	    <arg name="model_red"     value="$(arg model_red)"/> 
+	    <arg name="laser_enable" value="$(arg laser_enable)"/>
+	</include>
 	<!-- rtabmap -->
   	<include file="$(find scorpio_rtabmap)/launch/scorpio_mapping.launch">
-		<arg name="localization"                  value="true"/>
+	    <arg name="localization"                  value="true"/>
+	    <arg name="model_red"     value="$(arg model_red)"/> 
 	</include>
-
+	<!-- rviz -->
+	<node if="$(arg model_red)" name="rviz" pkg="rviz" type="rviz" args="-d $(find scorpio_rtabmap)/rviz/scorpio_rtab_map_red.rviz"/>
+	<node unless="$(arg model_red)" name="rviz" pkg="rviz" type="rviz" args="-d $(find scorpio_rtabmap)/rviz/scorpio_rtab_map_silver.rviz"/>
 
 </launch>

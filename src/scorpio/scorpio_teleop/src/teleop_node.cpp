@@ -225,7 +225,7 @@ public:
 		ufd.fd = kfd;
 		ufd.events = POLLIN;
 		PrintfColour("");
-		for (;;)
+		while(ros::ok())
 		{
 			boost::this_thread::interruption_point();
 			sparkbasebit = 0;

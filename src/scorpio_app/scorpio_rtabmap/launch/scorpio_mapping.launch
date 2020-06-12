@@ -2,21 +2,26 @@
 <!--NXROBO scorpio rtabmap-->
 <!--scorpio技术讨论与反馈群：8346256-->
 <launch>
-  
-  <arg name="database_path"     default="rtabmap.db"/>
-  <arg name="rgbd_odometry"     default="false"/>
-  <arg name="rtabmapviz"        default="false"/>
-  <arg name="localization"      default="false"/>
-  <arg name="simulation"        default="false"/>
-  <arg name="sw_registered"     default="false"/>
-  <arg     if="$(arg localization)" name="args"  default=""/>
-  <arg unless="$(arg localization)" name="args"  default="--delete_db_on_start"/>
+	<arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
+	<arg name="database_path"     default="rtabmap.db"/>
+	<arg name="rgbd_odometry"     default="false"/>
+	<arg name="rtabmapviz"        default="false"/>
+	<arg name="localization"      default="false"/>
+	<arg name="simulation"        default="false"/>
+	<arg name="sw_registered"     default="false"/>
+	<arg     if="$(arg localization)" name="args"  default=""/>
+	<arg unless="$(arg localization)" name="args"  default="--delete_db_on_start"/>
 
-  <arg     if="$(arg simulation)" name="rgb_topic"   default="/camera/rgb/image_raw"/>
+  <arg     if="$(arg model_red)" name="rgb_topic"   default="/camera/rgb/image_rect_color"/>
+  <arg unless="$(arg model_red)" name="rgb_topic"   default="/camera/color/image_raw"/>
+  <arg     if="$(arg model_red)" name="depth_topic" default="/camera/depth_registered/image_raw"/>
+  <arg unless="$(arg model_red)" name="depth_topic" default="/camera/aligned_depth_to_color/image_raw"/>
+  <arg     if="$(arg model_red)" name="camera_info_topic" default="/camera/rgb/camera_info"/>
+  <arg unless="$(arg model_red)" name="camera_info_topic" default="/camera/color/camera_info"/>
+  <!--arg     if="$(arg simulation)" name="rgb_topic"   default="/camera/rgb/image_raw"/>
   <arg unless="$(arg simulation)" name="rgb_topic"   default="/camera/rgb/image_rect_color"/>
   <arg     if="$(arg simulation)" name="depth_topic" default="/camera/depth/image_raw"/>
-  <arg unless="$(arg simulation)" name="depth_topic" default="/camera/depth_registered/image_raw"/>
-  <arg name="camera_info_topic" default="/camera/rgb/camera_info"/>
+  <arg unless="$(arg simulation)" name="depth_topic" default="/camera/depth_registered/image_raw"/-->
   
   <arg name="wait_for_transform"  default="0.2"/> 
 

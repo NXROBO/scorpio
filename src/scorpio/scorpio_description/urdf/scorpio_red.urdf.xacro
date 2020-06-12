@@ -7,7 +7,7 @@
 -->
 
 <robot name="scorpio" xmlns:xacro="http://ros.org/wiki/xacro">
-  	<xacro:include filename="$(find scorpio_description)/urdf/base/car_base.urdf"/>  	
+  	<xacro:include filename="$(find scorpio_description)/urdf/base/car_base_red.urdf"/>  	
 	<!--<xacro:include filename="$(find scorpio_description)/urdf/sensors/lidar.urdf"/>-->
 	<xacro:include filename="$(find scorpio_description)/urdf/sensors/astra_camera.urdf" />
 	<xacro:include filename="$(find ydlidar_g2)/urdf/ydlidar.urdf" />

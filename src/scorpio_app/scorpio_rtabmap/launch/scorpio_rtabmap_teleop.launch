@@ -2,15 +2,23 @@
 <!--scorpio rtabmap-->
 <!--scorpio技术讨论与反馈群：8346256-->
 <launch>
-
+    <arg name="hall_encoder" default="true"/>
+    <arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
+    <arg name="laser_enable" default="false"/>
 	<!-- scorpio base driver -->
-	<include file="$(find scorpio_rtabmap)/launch/rtab_demo.launch"/>
-
+	<include file="$(find scorpio_rtabmap)/launch/rtab_demo.launch">
+	    <arg name="hall_encoder" value="$(arg hall_encoder)"/>
+	    <arg name="model_red"     value="$(arg model_red)"/> 
+	    <arg name="laser_enable" value="$(arg laser_enable)"/>
+	</include>
 	<!-- rtabmap -->
-  	<include file="$(find scorpio_rtabmap)/launch/scorpio_mapping.launch"/>
-	
+  	<include file="$(find scorpio_rtabmap)/launch/scorpio_mapping.launch">
+	    <arg name="model_red"     value="$(arg model_red)"/> 
+	</include>
 	<!-- rviz -->
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find scorpio_rtabmap)/rviz/scorpio_rtab_map.rviz"/>
+	<node if="$(arg model_red)" name="rviz" pkg="rviz" type="rviz" args="-d $(find scorpio_rtabmap)/rviz/scorpio_rtab_map_red.rviz"/>
+	<node unless="$(arg model_red)" name="rviz" pkg="rviz" type="rviz" args="-d $(find scorpio_rtabmap)/rviz/scorpio_rtab_map_silver.rviz"/>
+
       	<!--创建新的终端，scorpio键盘控制 “wsad”分别代表“前后左右”-->
   	<node pkg="scorpio_teleop" type="keyboard_control.sh" name="rtab_3d" />
 </launch>

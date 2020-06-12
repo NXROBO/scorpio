@@ -4,29 +4,36 @@
 
     <arg name="hall_encoder" default="true"/>
     <arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
-	<arg name="laser_enable" default="false"/>
+    <arg name="laser_enable" default="false"/>
     <include file="$(find scorpio_bringup)/launch/driver_bringup.launch">
 		<arg name="hall_encoder" value="$(arg hall_encoder)"/>
 		<arg name="model_red"  value="$(arg model_red)"/>
 		<arg name="laser_enable"  value="$(arg laser_enable)"/>
     </include>
-    
+	
+	
+ 	<group if="$(arg model_red)">
+		<!-- Run the depthimage_to_laserscan node -->
+		<node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan" output="screen">
+			<remap from="image" to="/camera/depth/image_raw" />
+			<remap from="camera_info" to="/camera/depth/camera_info" />
+			<remap from="scan" to="/scan" />
+			<param name="output_frame_id" value="/camera_depth_frame" />
+			<param name="scan_height" value="50" />
+		</node>
+	</group>   
+	
+	<group unless="$(arg model_red)">
+		<!-- Run the depthimage_to_laserscan node -->
+		<node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan" output="screen">
+			<remap from="image" to="/camera/depth/image_rect_raw" />
+			<remap from="camera_info" to="/camera/depth/camera_info" />
+			<remap from="scan" to="/scan" />
+			<param name="output_frame_id" value="/camera_depth_frame" />
+			<param name="scan_height" value="50" />
+		</node>
+	</group>	
 
-	<!-- Run the depthimage_to_laserscan node -->
-	<node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan" output="screen">
-    
-
-		<!--<remap from="image" to="/camera/depth/image_raw" />-->
-		<remap from="image" to="/camera/depth/image_raw" />
-
-		<!--<remap from="camera_info" to="/camera/depth/camera_info" />-->
-		<remap from="camera_info" to="/camera/depth/camera_info" />
-
-		<remap from="scan" to="/scan" />
-		<param name="output_frame_id" value="/camera_depth_frame" />
-
-		<param name="scan_height" value="50" />
-	</node>
 
 
   <!-- Move base -->

@@ -9,6 +9,7 @@
 	<arg name="depth_topic" default="/camera/depth/points"/>
 	<include file="$(find scorpio_bringup)/launch/driver_bringup.launch">
 		<arg name="hall_encoder" value="$(arg hall_encoder)"/>
+		<arg name="model_red"  value="$(arg model_red)"/>
 	</include>
 	<group if="$(arg model_red)">
 		<include file="$(find scorpio_follower)/launch/nxfollower_bringup_nodelet.launch">
@@ -18,8 +19,8 @@
 		<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
 	</group>
 	<group unless="$(arg model_red)">
-			<include file="$(find scorpio_follower)/launch/nxfollower_bringup_nodelet.launch">
-			<arg name="depth_topic" value="/camera/depth/points"/>
+			<include file="$(find scorpio_follower)/launch/nxfollower_bringup_nodelet.launch" >
+			<arg name="depth_topic" value="/camera/depth_registered/points"/>
 		</include>	
 			<!--在rviz显示-->
 		<arg name="rvizconfig" default="$(find scorpio_follower)/rviz/follow_silver.rviz" />
