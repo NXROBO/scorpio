@@ -25,7 +25,7 @@ OSDescription=$(lsb_release -d --short)
 OSArch=$(uname -m)
 
 PROJECTPATH=$(cd `dirname $0`; pwd)
-CAR_COLOR=$(cat ${PROJECTPATH}/../scorpio.txt)
+CAR_COLOR=$(cat /opt/scorpio.txt)
 echo ${CAR_COLOR}
 if [[ "${CAR_COLOR}" == "silver" ]]; then
 	RED_CAR="false"
