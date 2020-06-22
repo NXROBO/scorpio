@@ -265,7 +265,7 @@ scorpio_navigation_3d(){
 	echo -e "${Info}" 
 	echo && stty erase ^? && read -p "按回车键（Enter）开始：" 
 	if [[ "${SLAMTYPE}" == "2d" ]]; then
-		roslaunch scorpio_navigation amcl_demo_rviz.launch model_red:=${RED_CAR}
+		roslaunch scorpio_navigation scorpio_navigation_camera.launch model_red:=${RED_CAR}
 	else
 		roslaunch scorpio_rtabmap scorpio_rtabmap_nav.launch model_red:=${RED_CAR}
 	fi	
