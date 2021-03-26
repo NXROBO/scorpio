@@ -176,6 +176,27 @@ let_robot_go(){
 }
 
 
+scorpio_test_mode(){
+	PROJECTPATH=$(cd `dirname $0`; pwd)
+	source ${PROJECTPATH}/devel/setup.bash	
+	echo -e "${Info}老化测试程序，请将悬挂起来，轮子不要着地进行测试，请选择：
+	1.执行5分钟的检测功能；
+        2.执行老化检测功能，直至断电。"
+        echo -e "${Info}退出请输入：Ctrl + c " 
+	echo && stty erase ^? && read -p "请选择 1 或 2 ：" chnum
+ 	case "$chnum" in
+		1)
+		roslaunch scorpio_test all_run_test_st.launch model_red:=${RED_CAR}	
+		;;
+		2)
+		roslaunch scorpio_test all_run_test.launch model_red:=${RED_CAR}	
+		;;
+		*)
+		echo -e "${Error} 退出!"	
+		;;
+	esac
+}
+
 #远程（手机APP）控制scorpio
 remote_control_robot(){
 	master_uri_setup
@@ -477,6 +498,9 @@ case "$num" in
 	;;
 	7)
 	scorpio_navigation_3d
+	;;
+	98)
+	scorpio_test_mode
 	;;
 	100)
 	tell_us
