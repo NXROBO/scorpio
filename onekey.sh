@@ -423,6 +423,27 @@ scorpio_build_map_3d(){
 	
 }
 
+clear_user_data(){
+	PROJECTPATH=$(cd `dirname $0`; pwd)
+	source ${PROJECTPATH}/devel/setup.bash
+
+	echo -e "${Info}" 
+	echo -e "${Info}    清除用户数据"
+	echo -e "${Info}将会删掉地图数据，ROS的log记录,和浏览器的所有数据"
+
+	echo && stty erase ^? && read -p "请选择是否继续y/n：" choose
+
+	if [[ "${choose}" == "y" ]]; then
+                rm -fr ${PROJECTPATH}/map*
+		rm -fr ~/.ros/*
+		rm -fr ~/.mozilla/firefox/*
+		rosclean purge -y
+		echo -e "${Info}    已清除用户数据"
+	else
+		return
+	fi
+
+}
 coming_soon(){
 	echo -e "${Tip} coming_soon!" 
 }
@@ -471,6 +492,7 @@ echo -e "--------------分隔线----------------
   ${Green_font_prefix}102.${Font_color_suffix} 单独安装ROS环境
   ${Green_font_prefix}103.${Font_color_suffix} 单独安装scorpio依赖
   ${Green_font_prefix}104.${Font_color_suffix} 文件传输
+  ${Green_font_prefix}105.${Font_color_suffix} 清除用户数据
  "
 menu_status
 echo && stty erase ^? && read -p "请输入数字：" num
@@ -517,6 +539,9 @@ case "$num" in
 	104)
 	qrcode_transfer_files
 	;;
+	105)
+	clear_user_data
+	;;	
 	*)
 	echo -e "${Error} 请输入正确的数字 "
 	;;

@@ -79,8 +79,8 @@ public:
 
     min_x_ = -0.2;
     max_x_ = 0.2;
-    min_y_ = -0.1;
-    max_y_ = 0.3;
+    min_y_ = 0.2;//-0.1;
+    max_y_ = 0.4;//0.3;
     max_z_ = 1.5;
     goal_z_ = 0.7;
     z_scale_ = 0.8;
@@ -129,7 +129,7 @@ public:
     for (int kk = 0; kk < cloud->points.size(); kk++)
     {
       pt = cloud->points[kk];
-      if (!std::isnan(x) && !std::isnan(y) && !std::isnan(z))
+      if ((!std::isnan(x) && !std::isnan(y) && !std::isnan(z))&&(!std::isinf(pt.x) && !std::isinf(pt.y) && !std::isinf(pt.z)))
       {
         if (-pt.y > min_y_ && -pt.y < max_y_ && pt.x < max_x_ && pt.x > min_x_ && pt.z < max_z_)
         {
@@ -155,7 +155,8 @@ public:
     }
     else
     {
-      cmdvel_pub.publish(geometry_msgs::TwistPtr(new geometry_msgs::Twist()));
+      pubCmd(0, 0);
+	//cmdvel_pub.publish(geometry_msgs::TwistPtr(new geometry_msgs::Twist()));
     }
   }
 
@@ -183,7 +184,10 @@ public:
     geometry_msgs::TwistPtr cmd(new geometry_msgs::Twist());
     cmd->linear.x = x_linear;
     cmd->angular.z = z_angular;
-
+    if(fabs(cmd->linear.x)>0.4)
+	cmd->linear.x = 0.4;
+    else if(fabs(cmd->linear.x)<-0.4)
+	cmd->linear.x = -0.4;
     cmdvel_pub.publish(cmd);
   }
 
