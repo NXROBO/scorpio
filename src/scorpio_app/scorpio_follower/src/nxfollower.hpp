@@ -184,9 +184,9 @@ public:
     geometry_msgs::TwistPtr cmd(new geometry_msgs::Twist());
     cmd->linear.x = x_linear;
     cmd->angular.z = z_angular;
-    if(fabs(cmd->linear.x)>0.4)
+    if(cmd->linear.x > 0.4)
 	cmd->linear.x = 0.4;
-    else if(fabs(cmd->linear.x)<-0.4)
+    else if(cmd->linear.x < -0.4)
 	cmd->linear.x = -0.4;
     cmdvel_pub.publish(cmd);
   }
