@@ -89,7 +89,7 @@ public:
     x_thre = 0.05;
     y_thre = 0.087222222;
 
-    max_vx = 0.4;
+    max_vx = 0.4;   //定义最大的线性速度
     max_vz = 0.8;
 
     max_depth_ = 2;
@@ -184,10 +184,10 @@ public:
     geometry_msgs::TwistPtr cmd(new geometry_msgs::Twist());
     cmd->linear.x = x_linear;
     cmd->angular.z = z_angular;
-    if(cmd->linear.x > 0.4)
-	cmd->linear.x = 0.4;
-    else if(cmd->linear.x < -0.4)
-	cmd->linear.x = -0.4;
+    if(cmd->linear.x > max_vx)
+	cmd->linear.x = max_vx;
+    else if(cmd->linear.x < -max_vx)
+	cmd->linear.x = -max_vx;
     cmdvel_pub.publish(cmd);
   }
 
