@@ -3,7 +3,20 @@
  -->
 
 <launch>
-	<include file="$(find spark_follower)/launch/include/velocity_smoother.launch.xml"/>
+	<arg name="hall_encoder" default="true"/>
+    <arg name="model_red"     default="false" doc="red is for the student,silver is for the teacher"/> 
+	<arg name="depth_topic" default="/camera/depth/points"/>
+	<include file="$(find scorpio_bringup)/launch/driver_bringup.launch">
+		<arg name="hall_encoder" value="$(arg hall_encoder)"/>
+		<arg name="model_red"  value="$(arg model_red)"/>
+	</include>
+  	<!--创建新的终端，spark键盘控制 “wsad”分别代表“前后左右”-->
+  	<node pkg="scorpio_teleop" type="keyboard_control.sh" name="kc_2d" />
+
+
+	<include file="$(find scorpio_follower)/launch/include/velocity_smoother_normal.launch.xml"/>
 		
-	<node pkg="spark_follower" type="nxfollower" name="nxfollower"  output="screen"/>
+	<node pkg="scorpio_follower" type="nxfollower_c_node" name="nxfollower_c_node"  output="screen">
+		<remap from="/camera/depth/points" to="/camera/depth_registered/points"/>
+	</node>	
 </launch>

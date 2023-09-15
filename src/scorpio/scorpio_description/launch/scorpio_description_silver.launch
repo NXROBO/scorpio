@@ -14,7 +14,7 @@
 	<rosparam param="source_list">["wheel_states"]</rosparam>
   </node>
   
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
       
   <!--show robo with rviz 
   <arg name="rvizconfig" default="$(find scorpio_description)/rviz/urdf.rviz" />

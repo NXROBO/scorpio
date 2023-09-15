@@ -3,7 +3,6 @@
 <!--
 License: Apache 2.0. See LICENSE file in root directory.
 Copyright(c) 2017 Intel Corporation. All Rights Reserved
-
 This is the URDF model for the Intel RealSense 430 camera, in it's
 aluminum peripherial evaluation case.
 -->
@@ -36,7 +35,6 @@ aluminum peripherial evaluation case.
 	  <color rgba="0.5 0.5 0.5 1"/>
     </material>
 
-
     <!-- camera body, with origin at bottom screw mount -->
     <joint name="camera_joint" type="fixed">
       <xacro:insert_block name="origin" />
@@ -56,7 +54,7 @@ aluminum peripherial evaluation case.
       <origin xyz="${d435_cam_mount_from_center_offset} ${-d435_cam_depth_py} -0.02" rpy="${M_PI/2} 0 ${M_PI/2}"/>
         <geometry>
           <!-- <box size="${d435_cam_width} ${d435_cam_height} ${d435_cam_depth}"/> -->
-          <mesh filename="package://scorpio_description/meshes/d435.dae" />
+          <mesh filename="package://spark_description/meshes/spark/sensors/spark_d435.dae" />
           <!--mesh filename="$(find realsense2_description)/meshes/d435.dae" /-->
 
         </geometry>
@@ -136,4 +134,9 @@ aluminum peripherial evaluation case.
     </joint>
     <link name="camera_color_optical_frame"/>
   </xacro:macro>
+
+  <xacro:sensor_d435 parent="base_link">
+	<origin xyz="0.16 0 0.229500" rpy="0 0 0"/>
+  </xacro:sensor_d435>
+
 </robot>

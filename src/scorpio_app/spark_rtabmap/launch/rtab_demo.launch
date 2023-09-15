@@ -1,0 +1,24 @@
+<!--rtab_demo -->
+<launch>
+  	<!-- camera -->
+  	<arg name="camera_type_tel" default="d435" doc="camera type [astrapro, astra]"/>
+	<arg name="depthtolaser"	default="/camera/depth/points"/>
+    <arg name="hall_encoder" default="true"/>
+    <arg name="model_red"     default="false" doc="red is for the student,silver is for the teacher"/> 
+    <arg name="laser_enable" default="false"/>
+    <include file="$(find scorpio_bringup)/launch/driver_bringup.launch">
+		<arg name="hall_encoder" value="$(arg hall_encoder)"/>
+		<arg name="model_red"  value="$(arg model_red)"/>
+		<arg name="laser_enable"  value="$(arg laser_enable)"/>
+    </include>
+	
+
+	<!-- Run the depthimage_to_laserscan node -->
+	<include file="$(find camera_driver_transfer)/launch/$(arg camera_type_tel)_p2s.launch">
+	</include>
+
+ 
+  	<!-- Move base -->
+  <include file="$(find scorpio_navigation)/launch/includes/move_base.launch.xml"/>
+
+</launch>

@@ -16,26 +16,12 @@
 		<arg name="laser_enable"  value="$(arg laser_enable)"/>
     </include>
     
-	<group if="$(arg model_red)">
-		<!-- Run the depthimage_to_laserscan node -->
-		<node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan" output="screen">
-			<remap from="image" to="/camera/depth/image_raw" />
-			<remap from="camera_info" to="/camera/depth/camera_info" />
-			<remap from="scan" to="/scan" />
-			<param name="output_frame_id" value="/camera_depth_frame" />
-			<param name="scan_height" value="50" />
-		</node>
-	</group>
-	<group unless="$(arg model_red)">
-		<!-- Run the depthimage_to_laserscan node -->
-		<node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan" output="screen">
-			<remap from="image" to="/camera/depth/image_rect_raw" />
-			<remap from="camera_info" to="/camera/depth/camera_info" />
-			<remap from="scan" to="/scan" />
-			<param name="output_frame_id" value="/camera_depth_frame" />
-			<param name="scan_height" value="50" />
-		</node>
-	</group>	
+    <arg     if="$(arg model_red)" name="camera_type_tel"   default="astrapro"/>
+    <arg unless="$(arg model_red)" name="camera_type_tel"   default="d435"/>
+    <!-- Run the depthimage_to_laserscan node -->
+    <include file="$(find camera_driver_transfer)/launch/$(arg camera_type_tel)_p2s.launch">
+    </include>
+
 	  <!-- SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
 	  <include file="$(find scorpio_slam)/launch/scorpio_$(arg slam_methods).launch">
 		<!--arg name="model" value="$(arg model)"/-->
@@ -51,6 +37,5 @@
     		<node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find scorpio_slam)/rviz/scorpio_$(arg slam_methods)_silver.rviz"/>
 		</group>
 	</group>
-  <!--创建新的终端，scorpio键盘控制 “wsad”分别代表“前后左右”-->
-  <node pkg="scorpio_teleop" type="keyboard_control.sh" name="kc" />
+
 </launch>

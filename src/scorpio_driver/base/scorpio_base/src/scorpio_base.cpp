@@ -679,12 +679,12 @@ public:
 	{
 		if( openSerialPort(f, serial_port_, port_name_, port) == 0)
 		{
-			ROS_INFO("Connected to Scorpio base successfully.");
+			ROS_INFO("Connected to Scorpio base successfully.````````.%s",port_name_.c_str());
 			startCloseCmd(0x00, 1);
 		}
 		else
 		{
-			ROS_FATAL("Could not connect to Scorpio base.");
+			ROS_FATAL("Could not connect to Scorpio base.%s", port_name_.c_str());
 			ROS_BREAK();
 		}
 	}

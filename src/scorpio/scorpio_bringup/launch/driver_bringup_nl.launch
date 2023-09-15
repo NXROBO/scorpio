@@ -27,9 +27,9 @@
 
   	<!-- 3D sensor -->
   	<arg name="3d_sensor" default="d435"/>  <!-- r200, kinect, asus_xtion_pro -->
-  	<include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
-		<arg name="align_depth"         default="true"/>
-  	</include>
+	<include file="$(find camera_driver_transfer)/launch/d435.launch">
+		<arg name="dp_rgist"         default="true"/>
+	</include>
 
 	<!-- include file="$(find ydlidar_g4)/launch/lidar.launch">
   	</include -->	

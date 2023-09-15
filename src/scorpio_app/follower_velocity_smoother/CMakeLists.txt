@@ -21,6 +21,16 @@ add_library(${PROJECT_NAME}_nodelet src/velocity_smoother_nodelet.cpp)
 target_link_libraries(${PROJECT_NAME}_nodelet ${catkin_LIBRARIES})
 add_dependencies(${PROJECT_NAME}_nodelet ${PROJECT_NAME}_gencfg)
 
+
+add_executable(velocity_smoother_node src/velocity_smoother_node.cpp)
+target_link_libraries(velocity_smoother_node
+  ${catkin_LIBRARIES}
+)
+add_dependencies(velocity_smoother_node 
+  ${${PROJECT_NAME}_EXPORTED_TARGETS} 
+  ${catkin_EXPORTED_TARGETS} 
+  ${PROJECT_NAME}_generate_messages_cpp
+)
 #############
 ## Install ##
 #############

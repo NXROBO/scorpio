@@ -1,0 +1,20 @@
+<!--spark rtabmap-->
+<!--SPARK技术讨论与反馈群：8346256-->
+<launch>
+
+	<!-- camera -->
+	<arg name="camera_type_tel" default="d435" doc="camera type [astrapro, astra]" />
+	<!-- spark base driver -->
+	<include file="$(find spark_rtabmap)/launch/rtab_demo.launch">
+		<arg name="camera_type_tel"	value="$(arg camera_type_tel)" />
+
+	</include>
+
+	<!-- rtabmap -->
+  	<include file="$(find spark_rtabmap)/launch/spark_mapping_d435.launch"/>
+
+	<!-- rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find scorpio_rtabmap)/rviz/scorpio_rtab_map_silver.rviz"/>
+      	<!--创建新的终端，spark键盘控制 “wsad”分别代表“前后左右”-->
+  	<node pkg="scorpio_teleop" type="keyboard_control.sh" name="rtab_3d" />
+</launch>

@@ -38,7 +38,7 @@
 #include <pcl_ros/point_cloud.h>
 #include <pcl/point_types.h>
 #include <sstream>
-
+#define MAX_LINEAR_X 0.3
 namespace nxfollower
 {
 typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
@@ -79,7 +79,7 @@ public:
 
     min_x_ = -0.2;
     max_x_ = 0.2;
-    min_y_ = 0.2;//-0.1;
+    min_y_ = -0.0;//-0.1;
     max_y_ = 0.4;//0.3;
     max_z_ = 1.5;
     goal_z_ = 0.7;
@@ -126,10 +126,10 @@ public:
     // Number of points observed
     unsigned int n = 0;
     pcl::PointXYZ pt;
-    for (int kk = 0; kk < cloud->points.size(); kk++)
+    for (int kk = 0; kk < cloud->points.size()/2; kk++)
     {
       pt = cloud->points[kk];
-      if ((!std::isnan(x) && !std::isnan(y) && !std::isnan(z))&&(!std::isinf(pt.x) && !std::isinf(pt.y) && !std::isinf(pt.z)))
+      if ((!std::isnan(x) && !std::isnan(y) && !std::isnan(z))&&(!std::isnan(pt.x) && !std::isnan(pt.y) && !std::isnan(pt.z))&&(!std::isinf(pt.x) && !std::isinf(pt.y) && !std::isinf(pt.z)))
       {
         if (-pt.y > min_y_ && -pt.y < max_y_ && pt.x < max_x_ && pt.x > min_x_ && pt.z < max_z_)
         {
@@ -182,12 +182,16 @@ public:
       z_angular = 0;
 
     geometry_msgs::TwistPtr cmd(new geometry_msgs::Twist());
+    if(x_linear > MAX_LINEAR_X)
+      x_linear = MAX_LINEAR_X;
+    else if(x_linear < -MAX_LINEAR_X)
+      x_linear = -MAX_LINEAR_X;        
     cmd->linear.x = x_linear;
     cmd->angular.z = z_angular;
-    if(cmd->linear.x > max_vx)
-	cmd->linear.x = max_vx;
-    else if(cmd->linear.x < -max_vx)
-	cmd->linear.x = -max_vx;
+  //   if(cmd->linear.x > max_vx)
+	// cmd->linear.x = max_vx;
+  //   else if(cmd->linear.x < -max_vx)
+	// cmd->linear.x = -max_vx;
     cmdvel_pub.publish(cmd);
   }
 

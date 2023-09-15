@@ -11,7 +11,7 @@ export PATH
 #=================================================
 
 
-sh_ver="1.1.0"
+sh_ver="1.2.0"
 filepath=$(cd "$(dirname "$0")"; pwd)
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m" && Yellow_font_prefix="\e[1;33m" && Blue_font_prefix="\e[0;34m"
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
@@ -41,6 +41,8 @@ check_sys(){
                 ROS_Ver="kinetic"
         elif [[ "${Version}" == "18.04" ]]; then
                 ROS_Ver="melodic"
+        elif [[ "${Version}" == "20.04" ]]; then
+                ROS_Ver="noetic"
         else
                 echo -e "${Error} scorpio不支持当前系统 ${OSDescription} !" && exit 1
         fi
@@ -141,13 +143,35 @@ install_all(){
 
 #远程设置
 master_uri_setup(){
-	wlp1s_ip=`/sbin/ifconfig wlp1s0|grep inet|awk '{print $2}'|awk -F: '{print $2}'`
-	if [ $wlp1s_ip ]; then
-		echo -e "${Info}使用无线网络wlp2s0" 
+	eth_ip=`/sbin/ifconfig eth0|grep 'inet '|awk '{print $2}'`
+	wlp1s_ip=`/sbin/ifconfig wlp1s0|grep 'inet '|awk '{print $2}'`
+	wlp2s_ip=`/sbin/ifconfig wlp2s0|grep 'inet '|awk '{print $2}'`
+	wlan_ip=`/sbin/ifconfig wlan0|grep 'inet '|awk '{print $2}'`
+	enp3s_ip=`/sbin/ifconfig enp3s0|grep 'inet '|awk '{print $2}'`
+	wlo1_ip=`/sbin/ifconfig wlo1|grep 'inet '|awk '{print $2}'`
+	wlp0s_ip=`/sbin/ifconfig wlp0s20f3|grep 'inet '|awk '{print $2}'`
+	if [ $eth_ip ]; then
+		echo -e "${Info}使用有线网络eth0" 
+		local_ip=$eth_ip
+	elif [ $wlo1_ip ]; then
+		echo -e "${Info}使用无线网络wlo1" 
+	  	local_ip=$wlo1_ip
+	elif [ $wlp1s_ip ]; then
+		echo -e "${Info}使用无线网络wlp1s0" 
 	  	local_ip=$wlp1s_ip
-	else 
-		echo -e "${Info}未找到有效网络wlp2s0" 
-	  	local_ip="127.0.0.1"		
+
+	elif [ $wlp2s_ip ]; then
+		echo -e "${Info}使用无线网络wlp2s0" 
+	  	local_ip=$wlp2s_ip
+	elif [ $wlan_ip ]; then
+		echo -e "${Info}使用无线网络wlan0" 
+	  	local_ip=$wlan_ip
+	elif [ $enp3s_ip ]; then
+		echo -e "${Info}使用无线网络enp3s0" 
+		local_ip=$enp3s_ip	
+	elif [ $wlp0s_ip ]; then
+		echo -e "${Info}使用无线网络wlp0s20f3" 
+		local_ip=$wlp0s_ip			
 	fi
 	export ROS_HOSTNAME=$local_ip
 	export ROS_MASTER_URI="http://${local_ip}:11311"
@@ -229,7 +253,7 @@ people_follow(){
 	echo -e "${Info}" 
 	echo && stty erase ^? && read -p "按回车键（Enter）开始：" 
 
-	roslaunch scorpio_follower bringup.launch model_red:=${RED_CAR}
+	roslaunch scorpio_follower nxfollower_bringup.launch model_red:=${RED_CAR}
 }
 
 
@@ -328,7 +352,37 @@ scorpio_build_map_2d(){
 	roslaunch scorpio_slam 2d_slam_teleop.launch slam_methods_tel:=${SLAMTYPE} model_red:=${RED_CAR} 
 	
 }
+
 qrcode_transfer_files(){
+	eth_ip=`/sbin/ifconfig eth0|grep 'inet '|awk '{print $2}'`
+	wlp1s_ip=`/sbin/ifconfig wlp1s0|grep 'inet '|awk '{print $2}'`
+	wlp2s_ip=`/sbin/ifconfig wlp2s0|grep 'inet '|awk '{print $2}'`
+	wlan_ip=`/sbin/ifconfig wlan0|grep 'inet '|awk '{print $2}'`
+	enp3s_ip=`/sbin/ifconfig enp3s0|grep 'inet '|awk '{print $2}'`
+	wlp0s_ip=`/sbin/ifconfig wlp0s20f3|grep 'inet '|awk '{print $2}'`
+	wlo1_ip=`/sbin/ifconfig wlo1|grep 'inet '|awk '{print $2}'`
+	if [ $wlp1s_ip ]; then
+		echo -e "${Info}使用无线网络wlp1s0" 
+	  	net_interface="wlp1s0"
+	elif [ $wlo1_ip ]; then
+		echo -e "${Info}使用无线网络wlo1" 
+	  	net_interface="wlo1"	  	
+	elif [ $wlp2s_ip ]; then
+		echo -e "${Info}使用无线网络wlp2s0" 
+	  	net_interface="wlp2s0"
+	elif [ $wlan_ip ]; then
+		echo -e "${Info}使用无线网络wlan0" 
+	  	net_interface="wlan0"
+	elif [ $enp3s_ip ]; then
+		echo -e "${Info}使用无线网络enp3s0" 
+		net_interface="enp3s0"
+	elif [ $wlp0s_ip ]; then
+		echo -e "${Info}使用无线网络wlp0s20f3" 
+		net_interface="wlp0s20f3"		
+	elif [ $eth_ip ]; then
+		echo -e "${Info}使用有线网络eth0" 
+		net_interface="eth0"
+	fi
 	echo -e "${Info}" 
 	echo -e "${Info}通过局域网收发文件" 
 	echo -e "${Info}" 
@@ -339,7 +393,7 @@ qrcode_transfer_files(){
 	echo && stty erase ^? && read -p "请输入数字 [1-2]：" cnum
 	case "$cnum" in
 		1)
-		echo -e "${Info}请输入文件名，带上文件绝对路径，如 /home/scorpio/a.jpg：
+		echo -e "${Info}请输入文件名，带上文件绝对路径，如 /home/${USER}/a.jpg：
 		 退出请输入：Ctrl + c" 
 		echo && stty erase ^? && read -p "请输入要发送的文件：" s_file
 		if [ -f "$s_file" ]; then
@@ -349,20 +403,20 @@ qrcode_transfer_files(){
 			exit
 		fi
 		
-		qrcp send $s_file
+		qrcp send  -i $net_interface $s_file
 		;;
 		2)
-		echo -e "${Info}请输入接收到的文件存放的路径，默认为 /home/scorpio/Downloads：
+		echo -e "${Info}请输入接收到的文件存放的路径，默认为 /home/${USER}/Downloads：
 		退出请输入：Ctrl + c" 
 		echo && stty erase ^? && read -p "请输入文件存放的文件夹路径：" s_file
 		if [ -d "$s_file" ]; then
 			echo ""
 		else 
-			echo -e "${Info}${Red_font_prefix}文件夹不存在，将存放在默认文件夹/home/scorpio/Downloads中${Font_color_suffix}"
-			s_file="/home/scorpio/Downloads"
+			echo -e "${Info}${Red_font_prefix}文件夹不存在，将存放在默认文件夹/home/${USER}/Downloads中${Font_color_suffix}"
+			s_file="/home/${USER}/Downloads"
 		fi
 		echo -e "${Info}接收的文件将存放在：${Green_font_prefix}"$s_file"${Font_color_suffix}，目录下，请发送端扫码或者直接输入下面的网址选择文件发送"
-		qrcp receive --output=$s_file
+		qrcp  -i $net_interface receive --output=$s_file
 		;;
 		*)
 		echo -e "${Error} 错误，退出"
@@ -488,9 +542,6 @@ echo -e "--------------分隔线----------------
   ${Green_font_prefix}  7.${Font_color_suffix} 让scorpio使用深度摄像头进行导航
 ————————————
   ${Green_font_prefix}100.${Font_color_suffix} 问题反馈
-  ${Green_font_prefix}101.${Font_color_suffix} 完整安装
-  ${Green_font_prefix}102.${Font_color_suffix} 单独安装ROS环境
-  ${Green_font_prefix}103.${Font_color_suffix} 单独安装scorpio依赖
   ${Green_font_prefix}104.${Font_color_suffix} 文件传输
   ${Green_font_prefix}105.${Font_color_suffix} 清除用户数据
  "
