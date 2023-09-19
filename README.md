@@ -19,8 +19,8 @@
 
 ### 系统要求 Prequirement
 
-* System:	Ubuntu 14.04+
-* ROS Version:	indigo or kinetic(Desktop-Full Install) 
+* System:	Ubuntu 20.04+
+* ROS Version:	noetic (Desktop-Full Install) 
 
 ### 下载安装 Download and install
 
@@ -31,11 +31,7 @@ git clone https://github.com/NXROBO/scorpio.git
 * 安装依赖库 Install libraries and dependencies:
 ```yaml
 cd scorpio
-./onekey.sh
-```
-* 根据提示选择103 Choose NO.103
-```yaml
-103
+git checkout neotic_devel
 ```
 ### 编译运行 compile and run
 ```yaml
@@ -45,4 +41,7 @@ catkin_make
 ```yaml
 ./onekey.sh
 ```
-
+* 运行让小车动起来，选择1
+```yaml
+1
+```

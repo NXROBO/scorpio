@@ -3,7 +3,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
 #=================================================
-#	System Required: Ubuntu 16.04+
+#	System Required: Ubuntu 20.04+
 #	Description: Install ROS And Scorpiooooooooooooooooooooooooo
 #	Version: 1.0.0
 #	Site: http://www.nxrobo.com/
@@ -35,13 +35,7 @@ fi
 
 #检查系统要求
 check_sys(){
-        if [[ "${Version}" == "14.04" ]]; then
-                ROS_Ver="indigo"
-        elif [[ "${Version}" == "16.04" ]]; then
-                ROS_Ver="kinetic"
-        elif [[ "${Version}" == "18.04" ]]; then
-                ROS_Ver="melodic"
-        elif [[ "${Version}" == "20.04" ]]; then
+        if [[ "${Version}" == "20.04" ]]; then
                 ROS_Ver="noetic"
         else
                 echo -e "${Error} scorpio不支持当前系统 ${OSDescription} !" && exit 1
@@ -533,7 +527,7 @@ echo -e "--------------分隔线----------------
 --------------分隔线----------------
   ${Green_font_prefix}  0.${Font_color_suffix} 单独编译scorpio
 ————————————
-  ${Green_font_prefix}  1.${Font_color_suffix} 让机器人动起来
+  ${Green_font_prefix}  1.${Font_color_suffix} 让scorpio动起来
   ${Green_font_prefix}  2.${Font_color_suffix} 远程（手机APP）控制scorpio
   ${Green_font_prefix}  3.${Font_color_suffix} 让scorpio跟着你走
   ${Green_font_prefix}  4.${Font_color_suffix} 让scorpio使用激光雷达绘制地图
