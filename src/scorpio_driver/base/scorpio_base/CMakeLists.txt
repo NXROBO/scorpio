@@ -7,6 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   message_generation
+  dynamic_reconfigure
+  roslib
 )
 
 add_message_files(
@@ -19,6 +21,13 @@ generate_messages(
   DEPENDENCIES
   std_msgs
 )
+
+## Generate dynamic reconfigure parameters in the 'cfg' folder
+generate_dynamic_reconfigure_options(
+  cfg/DeviceParams.cfg
+)
+
+
 catkin_package(
   
   LIBRARIES 
@@ -26,9 +35,14 @@ catkin_package(
  # DEPENDS system_lib
 )
 
+# dynamic reconfigure
+link_directories(/usr/local/lib) # yaml-cpp lib
+FIND_LIBRARY(YAML_CPP_LIBRARIES yaml-cpp)
+
 include_directories(
   
   ${catkin_INCLUDE_DIRS}
+  /usr/local/include/yaml-cpp
   ../cereal_port/include
 )
 
@@ -41,9 +55,11 @@ set(scorpio_base_node_SRCS
 ###########
 ## Declare a C++ executable
 
+
 add_executable(scorpio_base_node ${scorpio_base_node_SRCS})
 target_link_libraries(scorpio_base_node
   ${catkin_LIBRARIES}
+  ${YAML_CPP_LIBRARIES}
   cereal_port
 )
 

@@ -33,6 +33,28 @@ else
 	RED_CAR="true"
 fi
 
+# 配置文件的路径
+CONFIG_FILE="./src/scorpio_driver/base/scorpio_base/cfg/device_config.yaml"
+
+# 检查文件是否存在
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "检测到文件不存在，正在创建..."
+    
+    # 创建目录，如果不存在
+    mkdir -p "$(dirname "$CONFIG_FILE")"
+    
+    # 创建并写入配置文件的内容
+    cat > "$CONFIG_FILE" << EOF
+motor:
+  angle_offset: -10
+EOF
+    
+    echo "配置文件已创建成功 $CONFIG_FILE"
+else
+    echo "配置文件已存在 $CONFIG_FILE"
+fi
+
+
 #检查系统要求
 check_sys(){
         if [[ "${Version}" == "20.04" ]]; then

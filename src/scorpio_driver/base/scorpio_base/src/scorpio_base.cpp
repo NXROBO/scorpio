@@ -23,6 +23,8 @@
  */
 #define NODE_VERSION 0.01
 #include <ros/ros.h>
+#include <ros/package.h>
+#include <yaml-cpp/yaml.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>				
 #include <geometry_msgs/Twist.h>			
@@ -49,7 +51,8 @@
 #include <sys/time.h>
 #include <ackermann_msgs/AckermannDriveStamped.h>
 #include <boost/thread/mutex.hpp>
-
+#include <dynamic_reconfigure/server.h>
+#include "scorpio_base/DeviceParamsConfig.h"
 
 #define NONE "\e[0m"
 #define BLACK "\e[0;30m"
@@ -63,7 +66,7 @@
 #define CYAN "\e[0;36m"
 #define MOVETO(x,y) printf("\033[%d;%dH", (x), (y))
 using namespace std;
-#define ANGLE_MIDDLE_POINT 1118			//right--1080++left
+#define ANGLE_MIDDLE_POINT 1100		//right--1080++left  1118
 #define ROOMBATIMEOUT (3000*1e6)
 #define PI 3.141592654
 #define WD 0.105
@@ -157,9 +160,12 @@ public:
 	double odometry_x_ ;
 	double odometry_y_ ;
 	double odometry_yaw_ ;
+	int Angular_Offset;
 	//Cereal port object
 	cereal::CerealPort * serial_port_0_stm32;
 	cereal::CerealPort * serial_port_3_motor;
+	dynamic_reconfigure::Server<scorpio_base::DeviceParamsConfig> server;
+
 	// *****************************************************************************
 	// Constructor
 	STM32ComSwitchNode(ros::NodeHandle _n, const char * new_serial_port)
@@ -171,8 +177,17 @@ public:
 		odometry_x_ = 0;
 		odometry_y_ = 0;
 		odometry_yaw_ = 0;
+		Angular_Offset = 0;
+		dynamic_reconfigure::Server<scorpio_base::DeviceParamsConfig>::CallbackType f;
+		f = boost::bind(&STM32ComSwitchNode::DeviceParamsDyRecfgCallBack, this, _1, _2);
+		server.setCallback(f);
+		sleep(1);
+		loadMotorConfig();
+
+		//readAngularOffsetFromFile(&Angular_Offset);
 		serial_port_0_stm32 = new cereal::CerealPort();
 		serial_port_3_motor = new cereal::CerealPort();
+
 		getPtrFunction();
 		//	ros::param::get("~hall_encoder",hall_encoder);
 		if (n.getParam("hall_encoder", hall_encoder)) 
@@ -234,6 +249,99 @@ public:
 		}
 		return true;
 	}
+	void DeviceParamsDyRecfgCallBack(scorpio_base::DeviceParamsConfig& config, uint32_t level)
+	{
+        server.updateConfig(config);
+		Angular_Offset = config.angle_offset;
+    	ROS_INFO("dynamic_reconfigure message, motor angle offset is %d", config.angle_offset);
+	}
+
+	void loadMotorConfig()
+	{
+		ros::NodeHandle nh;
+		int tmp_angle_offset;
+		std::string cmd;
+		std::string home_path = "/opt/nxrobo/device_config.yaml";
+		std::string ros_ws_path = ros::package::getPath("scorpio_base");
+		ros_ws_path.append("/cfg/");
+		cmd = "cp ";
+		cmd = cmd + home_path + " " + ros_ws_path;
+		system(cmd.c_str());
+		if (n.getParam("/motor/angle_offset", tmp_angle_offset)) 
+		{
+			//n.param("/motor/angle_offset", tmp_angle_offset, 0);
+			ROS_INFO("/motor/angle_offset %d", tmp_angle_offset);
+		}
+		else
+		{
+			n.param("/motor/angle_offset", tmp_angle_offset, 0);
+			ROS_INFO("xx /motor/angle_offset %d", tmp_angle_offset);
+		}
+
+
+		scorpio_base::DeviceParamsConfig config;
+		server.getConfigDefault(config);
+		config.angle_offset = tmp_angle_offset;
+		Angular_Offset = tmp_angle_offset;
+		server.updateConfig(config);
+
+	}
+
+	void saveMotorConfig()
+	{
+		std::string cmd;
+		std::string home_path = "/opt/nxrobo/device_config.yaml";
+		std::string ros_ws_path = ros::package::getPath("scorpio_base");
+		ros_ws_path.append("/cfg/device_config.yaml");
+		ROS_INFO("YAML path \"%s\"", ros_ws_path.c_str());
+		YAML::Node config = YAML::LoadFile(ros_ws_path);
+		config["motor"]["angle_offset"] = Angular_Offset;
+
+		std::ofstream fout(ros_ws_path);
+		fout << config;
+		cmd = "sudo cp ";
+		cmd = cmd + ros_ws_path + " " + home_path;
+		system(cmd.c_str());
+	}
+	// 从文件读取角度偏移量并转换为INT
+	int readAngularOffsetFromFile(int* result)
+	{
+		FILE* file = NULL;
+		char buffer[256] = {0};
+		int number = 0;
+		char filename[256];
+		const char* home = getenv("HOME");  // 获取用户目录
+		sprintf(filename, "%s/Documents/angular_offset.txt", home);		
+		// 打开文件－－只读方式
+		file = fopen(filename, "r");
+		if (file == NULL)
+		{
+			ROS_ERROR("错误，无法打开角度偏移量文件 %s", filename);
+			ROS_ERROR("建议先校准好再使用！");
+
+			return -1;  // 
+		}
+		
+		// 读取内容
+		if (fgets(buffer, sizeof(buffer), file) == NULL)
+		{
+			ROS_ERROR("错误，无法读取内容\n");
+			fclose(file);
+			return -2;  //
+		}
+		
+		// 关闭文件
+		fclose(file);
+		
+		// 将字符串转成整数
+		number = atoi(buffer);
+		
+		// 将字符串转成整数
+		*result = number;
+		
+		ROS_INFO("读取成功，数字值为%d\n", number);
+		return 0;  // 成功
+	}
 
 	void ackerMannCmdVelReceived(const ackermann_msgs::AckermannDriveStamped::ConstPtr &ack_vel)
 	{
@@ -248,7 +356,8 @@ public:
 
 	void rcvPwmFun(float x, float z)
 	{
-		int pwml=1080, pwma=ANGLE_MIDDLE_POINT;
+		int angular_middle_point = 1080 + 20 - Angular_Offset;
+		int pwml=1080, pwma=angular_middle_point;
 		unsigned char buf[20];
 		float dz;
 		if(z>1)
@@ -256,13 +365,13 @@ public:
 		dz=-180*z/M_PI*6;
 		if(dz>0)			//right转
 		{
-			pwma = ANGLE_MIDDLE_POINT-dz;
+			pwma = angular_middle_point-dz;
 			if(pwma<800)	//770
 			pwma = 800;	//770
 		}
 		else if(dz<0)	//left转
 		{
-			pwma = ANGLE_MIDDLE_POINT-dz;
+			pwma = angular_middle_point-dz;
 			if(pwma>1460)	//1230
 			pwma = 1460;	//1230
 		}

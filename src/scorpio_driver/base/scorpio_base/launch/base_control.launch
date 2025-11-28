@@ -5,11 +5,14 @@
 	<arg name="serialport" default="/dev/ttyS0"/> 
 	<arg name="hall_encoder" default="false"/> 
 	<arg name="limited_speed" default="3"/> 
-	<rosparam command="load" file="$(find scorpio_base)/cfg/device_config.yaml" />
+  	<rosparam command="load" file="$(find scorpio_base)/cfg/device_config.yaml" />
 
 	<node pkg="scorpio_base" type="scorpio_base_node" name="scorpio_base_driver" args="$(arg serialport)" output="screen">
 		<param name="hall_encoder" value="$(arg hall_encoder)"/> 
 		<param name="limited_speed" type="double" value="$(arg limited_speed)"/>
 	</node>
 	<node pkg="scorpio_base" type="cmd_vel_to_ackermann_cmd_node" name="cmd_vel_to_ackermann_cmd_node" output="screen"/>
+	
+	<node pkg="scorpio_teleop" type="keyboard_control_robot.py" name="keyboard_control" output="screen"/>
+	
 </launch>
