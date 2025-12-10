@@ -47,7 +47,6 @@
 		<group if="$(eval lidar_type == 'ydlidar_g2' and  model_red == true)">
 			<include file="$(find ydlidar_g2)/launch/lidar.launch"></include>	
 		</group>
-	</group>
 
 	</group>
 
