@@ -40,9 +40,14 @@
 			<include file="$(find ydlidar_ros_driver)/launch/lidar.launch"></include>	
 		</group>
 
-		<group if="$(eval lidar_type == 'ydlidar_g2')">
+		<group if="$(eval lidar_type == 'ydlidar_g2' and model_red == false)">
+			<include file="$(find ydlidar_ros_driver)/launch/lidar.launch"></include>	
+		</group>
+		
+		<group if="$(eval lidar_type == 'ydlidar_g2' and  model_red == true)">
 			<include file="$(find ydlidar_g2)/launch/lidar.launch"></include>	
 		</group>
+	</group>
 
 	</group>
 
