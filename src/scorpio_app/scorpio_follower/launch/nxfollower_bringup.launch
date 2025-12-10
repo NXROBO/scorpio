@@ -6,9 +6,13 @@
 	<arg name="hall_encoder" default="true"/>
     <arg name="model_red"     default="false" doc="red is for the student,silver is for the teacher"/> 
 	<arg name="depth_topic" default="/camera/depth/points"/>
+	<arg name="lidar_type"     default="ydlidar_g4" doc="choice lidar type"/> 
+
 	<include file="$(find scorpio_bringup)/launch/driver_bringup.launch">
 		<arg name="hall_encoder" value="$(arg hall_encoder)"/>
 		<arg name="model_red"  value="$(arg model_red)"/>
+		<arg name="lidar_type"  value="$(arg lidar_type)"/>
+
 	</include>
   	<!--创建新的终端，spark键盘控制 “wsad”分别代表“前后左右”-->
   	<node pkg="scorpio_teleop" type="keyboard_control.sh" name="kc_2d" />

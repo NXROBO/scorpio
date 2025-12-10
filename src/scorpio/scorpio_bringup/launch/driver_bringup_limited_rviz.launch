@@ -6,6 +6,8 @@
     <arg name="hall_encoder" default="false"/>
 	<arg name="laser_enable" default="true"/>
 	<arg name="limited_speed" default="0.4"/> 
+	<arg name="lidar_type" default="ydlidar_g4"/>
+
     <!-- driver -->
     <group if="$(arg model_red)">
 		<include file="$(find scorpio_description)/launch/scorpio_description_red.launch"/>
@@ -20,10 +22,6 @@
 	    	<arg name="disparity_registered_processing" value="false"/>
 		</include>
   	
-		<group if="$(arg laser_enable)">
-			<include file="$(find ydlidar_g2)/launch/lidar.launch">
-			</include>	
-		</group>
 		<!--在rviz显示-->
 		<arg name="rvizconfig" default="$(find scorpio_teleop)/rviz/teleop_red.rviz" />
     	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
@@ -38,14 +36,26 @@
 			<arg name="dp_rgist"         default="true"/>
 		</include>
 
-		<group if="$(arg laser_enable)">
-			<include file="$(find ydlidar_g4)/launch/lidar.launch">
-			</include>	
-		</group>
 		<!--在rviz显示-->
     	<arg name="rvizconfig" default="$(find scorpio_teleop)/rviz/teleop_silver.rviz" />
     	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
     </group>
+
+	<group if="$(arg laser_enable)">
+
+		<group if="$(eval lidar_type == 'ydlidar_g6')">
+			<include file="$(find ydlidar_ros_driver)/launch/G6_G7.launch"></include>	
+		</group>
+
+		<group if="$(eval lidar_type == 'ydlidar_g4')">
+			<include file="$(find ydlidar_ros_driver)/launch/lidar.launch"></include>	
+		</group>
+
+		<group if="$(eval lidar_type == 'ydlidar_g2')">
+			<include file="$(find ydlidar_g2)/launch/lidar.launch"></include>	
+		</group>
+
+	</group>
 
     <include file="$(find scorpio_base)/launch/scorpio_base.launch">
 		<arg name="serialport"                  value="/dev/ttyS0"/>

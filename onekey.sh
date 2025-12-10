@@ -55,6 +55,8 @@ else
 fi
 
 
+LIDAR_TYPE=$(cat /opt/lidar.txt)
+
 #检查系统要求
 check_sys(){
         if [[ "${Version}" == "20.04" ]]; then
@@ -212,7 +214,7 @@ let_robot_go(){
 	echo -e "${Info}    退出请输入：Ctrl + c    " 
 	echo && stty erase ^? && read -p "按回车键（Enter）开始：" 
 
-	roslaunch scorpio_teleop app_op.launch model_red:=${RED_CAR}
+	roslaunch scorpio_teleop app_op.launch model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 }
 
 
@@ -226,10 +228,10 @@ scorpio_test_mode(){
 	echo && stty erase ^? && read -p "请选择 1 或 2 ：" chnum
  	case "$chnum" in
 		1)
-		roslaunch scorpio_test all_run_test_st.launch model_red:=${RED_CAR}	
+		roslaunch scorpio_test all_run_test_st.launch model_red:=${RED_CAR}	lidar_type:=${LIDAR_TYPE}
 		;;
 		2)
-		roslaunch scorpio_test all_run_test.launch model_red:=${RED_CAR}	
+		roslaunch scorpio_test all_run_test.launch model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 		;;
 		*)
 		echo -e "${Error} 退出!"	
@@ -252,7 +254,7 @@ remote_control_robot(){
 	echo -e "${Info}" 
 	echo && stty erase ^? && read -p "按回车键（Enter）开始：" 
 
-	roslaunch scorpio_teleop app_op_remote.launch model_red:=${RED_CAR}
+	roslaunch scorpio_teleop app_op_remote.launch model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 }
 
 #让scorpio跟着你走
@@ -269,7 +271,7 @@ people_follow(){
 	echo -e "${Info}" 
 	echo && stty erase ^? && read -p "按回车键（Enter）开始：" 
 
-	roslaunch scorpio_follower nxfollower_bringup.launch model_red:=${RED_CAR}
+	roslaunch scorpio_follower nxfollower_bringup.launch model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 }
 
 
@@ -289,7 +291,7 @@ scorpio_navigation_2d(){
 	echo -e "${Info}" 
 	echo && stty erase '^H' && read -p "按回车键（Enter）开始：" 
 
-	roslaunch scorpio_navigation scorpio_navigation.launch model_red:=${RED_CAR} 
+	roslaunch scorpio_navigation scorpio_navigation.launch model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 }
 #让scorpio使用深度摄像头进行导航
 scorpio_navigation_3d(){
@@ -326,9 +328,9 @@ scorpio_navigation_3d(){
 	echo -e "${Info}" 
 	echo && stty erase ^? && read -p "按回车键（Enter）开始：" 
 	if [[ "${SLAMTYPE}" == "2d" ]]; then
-		roslaunch scorpio_navigation scorpio_navigation_camera.launch model_red:=${RED_CAR}
+		roslaunch scorpio_navigation scorpio_navigation_camera.launch model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 	else
-		roslaunch scorpio_rtabmap scorpio_rtabmap_nav.launch model_red:=${RED_CAR}
+		roslaunch scorpio_rtabmap scorpio_rtabmap_nav.launch model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 	fi	
 }
 
@@ -365,7 +367,7 @@ scorpio_build_map_2d(){
 	echo -e "${Info}" 
 	echo && stty erase ^? && read -p "按回车键（Enter）开始：" 
 
-	roslaunch scorpio_slam 2d_slam_teleop.launch slam_methods_tel:=${SLAMTYPE} model_red:=${RED_CAR} 
+	roslaunch scorpio_slam 2d_slam_teleop.launch slam_methods_tel:=${SLAMTYPE} model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 	
 }
 
@@ -483,12 +485,12 @@ scorpio_build_map_3d(){
 		echo -e "${Tip}" 
 		echo && stty erase ^? && read -p "请选择是否继续y/n：" choose
 		if [[ "${choose}" == "y" ]]; then
-                	roslaunch scorpio_rtabmap scorpio_rtabmap_teleop.launch model_red:=${RED_CAR}
+                	roslaunch scorpio_rtabmap scorpio_rtabmap_teleop.launch model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 		else
 			return
 		fi
         else
-		roslaunch scorpio_slam depth_slam_teleop.launch slam_methods_tel:=${SLAMTYPE} model_red:=${RED_CAR}
+		roslaunch scorpio_slam depth_slam_teleop.launch slam_methods_tel:=${SLAMTYPE} model_red:=${RED_CAR} lidar_type:=${LIDAR_TYPE}
 	fi
 	
 }
@@ -526,6 +528,7 @@ menu_status(){
 		ROSVER=`/usr/bin/rosversion -d`
 		if [ $ROSVER ]; then
 			echo -e "${Tip} 当前ROS版本 ${ROSVER} !"
+			echo -e "${Tip} 正在使用 ${LIDAR_TYPE} 激光雷达"
 			return
 		fi 
 	fi

@@ -5,11 +5,15 @@
     <arg name="hall_encoder" default="true"/>
     <arg name="model_red"     default="true" doc="red is for the student,silver is for the teacher"/> 
     <arg name="laser_enable" default="false"/>
+	<arg name="lidar_type"     default="ydlidar_g4" doc="choice lidar type"/> 
+
 	<!-- scorpio base driver -->
 	<include file="$(find scorpio_rtabmap)/launch/rtab_demo.launch">
 	    <arg name="hall_encoder" value="$(arg hall_encoder)"/>
 	    <arg name="model_red"     value="$(arg model_red)"/> 
 	    <arg name="laser_enable" value="$(arg laser_enable)"/>
+		<arg name="lidar_type"  value="$(arg lidar_type)"/>
+
 	</include>
 	<!-- rtabmap -->
   	<include file="$(find scorpio_rtabmap)/launch/scorpio_mapping.launch">
