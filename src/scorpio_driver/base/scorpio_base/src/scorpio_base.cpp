@@ -159,6 +159,9 @@ public:
 	unsigned int countSerial, lastCountSerial;
 	boost::mutex t_mutex;
 	boost::mutex s3_mutex;
+	unsigned short Current_PWM;
+	int Flag_Get_Motor = 0;
+	double all_dist = 0;
 	float current_speed;
 	int cur_pwm;
 	int new_vel_bit;
@@ -464,32 +467,43 @@ public:
 			sleep(1);
 			if (motor_type == 1) // JZD电机
 			{
-				for (int i = 0; i < 10; i++)
+				while((Flag_Get_Motor == 0)||(first_time == 1))
 				{
-					startCloseCmd(0x01, 0x01); // open motor power
-					usleep(100000);
+					printf("======init the motor!======\n");
+					for (int i = 0; i < 10; i++)
+					{
+						startCloseCmd(0x01, 0x01); // open motor power
+						usleep(100000);
+						write_Can_Start_Data();
+						usleep(100000);
+						rcvPwmFun(0, 0);
+						usleep(100000);
+
+					}
+
 					write_Can_Start_Data();
 					usleep(100000);
+
+					write_Can_Clear_Stall();
+					usleep(100000);
 					rcvPwmFun(0, 0);
+
+					write_Can_Free_Wheel();
+					usleep(100000);
+
+					write_Can_Set_Odom_Feedback();
+					usleep(100000);
+
+					write_Can_Auto_Send_Odom_Time(10);
+					usleep(100000);
+
+					write_Can_Odom_Switch(0x01);
+					usleep(100000);
+					first_time = 0;
+
+
 				}
 
-				write_Can_Start_Data();
-				usleep(100000);
-
-				first_time = 0;
-				write_Can_Clear_Stall();
-				usleep(100000);
-				rcvPwmFun(0, 0);
-
-				write_Can_Free_Wheel();
-				usleep(100000);
-
-				write_Can_Set_Odom_Feedback();
-				usleep(100000);
-
-				write_Can_Auto_Send_Odom_Time(10);
-
-				write_Can_Odom_Switch(0x01);
 			}
 			else
 			{
@@ -954,9 +968,7 @@ public:
 		odometry_y_ = new_y;
 		odometry_yaw_ = new_yaw;
 	}
-	unsigned short Current_PWM;
-	int Flag_Get_Motor = 0;
-	double all_dist = 0;
+
 	int baseFun(unsigned char *buf, int len)
 	{
 		static unsigned int timesec, lastsec;
