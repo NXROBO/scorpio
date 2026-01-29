@@ -1,0 +1,13 @@
+# get the front and back distace from scan
+
+# request constants
+int32 request # any value
+---
+
+# response constants
+int8 SUCCESS        = 0
+int8 ERROR          = 1
+
+float64 front_distance
+float64 back_distance
+int8 result

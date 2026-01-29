@@ -1,0 +1,1 @@
+{"wifi_master":{"ssid":"scorpio-6f11","password":"12345678","ipaddress":"10.42.0.2","gateway":"10.42.0.255"},"wifi_slaver":{"ipaddress":"192.168.100.248"}}

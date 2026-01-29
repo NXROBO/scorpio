@@ -1,0 +1,14 @@
+##goal definition
+int32 TYPE_SCAN = 1   #雷达检测的方式
+int32 TYPE_ODOM = 0   #ODOM检测的方式
+
+int32 type        #检测方式
+bool is_const_vel   
+float64 const_rot_vel #速度的大小
+float64 move_distance #移动距离
+---
+#result definition
+bool result
+---
+#feedback
+float64 current_distance

@@ -1,0 +1,16 @@
+<launch>
+
+	<arg name="model_red"     default="false" doc="red is for the student,silver is for the teacher"/> 
+	<arg name="lidar_type"     default="ydlidar_g4" doc="choice lidar type"/> 
+
+	<!--SCORPIO底盘驱动，机器人描述,底盘,相机-->
+	<include file="$(find scorpio_rtabmap)/launch/scorpio_rtabmap_teleop.launch">
+		<arg name="model_red"  value="$(arg model_red)"/>
+		<arg name="lidar_type"  value="$(arg lidar_type)"/>
+	</include>
+
+	<!-- 鸿蒙通信驱动 -->
+  	<include file="$(find scorpio_hm_pi)/launch/hm_scorpio.launch"></include>
+
+
+</launch>

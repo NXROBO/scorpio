@@ -1,0 +1,12 @@
+##goal definition
+string source #目标请求的源
+bool is_const_vel #是否需要速度平滑
+string name 
+float64 const_rot_vel #速度的大小
+float64 goal_degree
+---
+#result definition
+bool result
+---
+#feedback
+float64 turn_degree

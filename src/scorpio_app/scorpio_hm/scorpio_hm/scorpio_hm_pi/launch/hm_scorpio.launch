@@ -1,0 +1,10 @@
+<launch>
+
+	<!-- 鸿蒙通信驱动 -->
+	<node name="hm_read_node" pkg="scorpio_hm_pi" type="hm_read_node" output="screen"/>
+	<node name="hm_write_node" pkg="scorpio_hm_pi" type="hm_write_node" output="screen"/>
+	<node name="hm_navi_node" pkg="scorpio_hm_pi" type="hm_navi_node" output="screen"/> 
+	<node name="shift_nav_node" pkg="scorpio_hm_pi" type="shift_nav_node.py" output="screen"/> 
+	<node name="mark_move_node" pkg="scorpio_hm_pi" type="mark_move.py" output="screen"/> 
+	
+</launch>
